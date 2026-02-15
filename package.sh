@@ -58,6 +58,7 @@ swiftc "$ROOT_DIR"/*.swift \
   -O \
   -framework AppKit \
   -framework SwiftUI \
+  -framework ScreenCaptureKit \
   -o "$BIN_PATH"
 
 # 5. 코드 서명

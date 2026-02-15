@@ -42,6 +42,7 @@ PLIST
 swiftc "$ROOT_DIR"/*.swift \
   -framework AppKit \
   -framework SwiftUI \
+  -framework ScreenCaptureKit \
   -o "$BIN_PATH"
 
 codesign --force --deep --sign - "$APP_DIR" >/dev/null
