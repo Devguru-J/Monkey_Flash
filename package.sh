@@ -37,8 +37,6 @@ cat > "$PLIST_DIR/Info.plist" <<'PLIST'
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
-    <key>LSUIElement</key>
-    <true/>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>CFBundleIconFile</key>

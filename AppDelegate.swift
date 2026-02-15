@@ -47,7 +47,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Application lifecycle
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(appState.showStatusBarIcon ? .accessory : .regular)
+        NSApp.setActivationPolicy(.regular)
 
         createStatusItem()
         rebuildOverlays()
@@ -61,6 +61,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             name: NSApplication.didChangeScreenParametersNotification,
             object: nil
         )
+    }
+
+    // Dock 아이콘 클릭 시 설정 창 열기
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        SettingsWindowController.shared.open()
+        return true
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -153,12 +159,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func applyStatusBarIconPolicy() {
         statusItem.isVisible = appState.showStatusBarIcon
-        if appState.showStatusBarIcon {
-            NSApp.setActivationPolicy(.accessory)
-        } else {
-            NSApp.setActivationPolicy(.regular)
-            SettingsWindowController.shared.open()
-        }
     }
 
     @objc private func openSettings() {
