@@ -257,9 +257,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: - Focused window detection
 
+    // 자기 앱(설정 창 등)이 최전면일 때 → NSWindow.frame으로 직접 추적
+    private func ownWindowInfo() -> FocusedWindowInfo? {
+        // keyWindow → mainWindow → 첫 번째 visible 창 순으로 시도, 오버레이 창은 제외
+        let candidates = ([NSApp.keyWindow, NSApp.mainWindow].compactMap { $0 }) + NSApp.windows
+        guard let win = candidates.first(where: { w in
+            w.isVisible && !w.isMiniaturized && !overlays.values.contains { $0 === w }
+        }) else { return nil }
+        return FocusedWindowInfo(rect: win.frame, cornerRadius: defaultCornerRadius())
+    }
+
     private func focusedWindowInfo() -> FocusedWindowInfo? {
         guard let frontmostPID = NSWorkspace.shared.frontmostApplication?.processIdentifier else { return nil }
-        if frontmostPID == ProcessInfo.processInfo.processIdentifier { return nil }
+
+        // 자기 자신이 최전면 → 설정 창 직접 추적
+        if frontmostPID == ProcessInfo.processInfo.processIdentifier {
+            return ownWindowInfo()
+        }
 
         if lastFocusedPID != frontmostPID {
             lastFocusedPID = frontmostPID
